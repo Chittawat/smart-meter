@@ -1,1 +1,2 @@
 # smart-meter
+This project’s goal is to gain a better understanding of the design and prototyping process, through which every product must go, along with testing at regular intervals.  Over the course of this 7-week exercise several design challenge had to be overcomed to produce a reliable smart meter capable of controlling a micro grid. To keep a meter cost-effective and to improve reliability , the design is made as simple as possible without infringing on its energy efficiency.

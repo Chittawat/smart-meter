@@ -1,0 +1,183 @@
+12:05:12 **** Incremental Build of configuration Debug for project D5simhost ****
+make all 
+Building file: ../src/D5simhost.c
+Invoking: Cygwin C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/D5simhost.d" -MT"src/D5simhost.o" -o "src/D5simhost.o" "../src/D5simhost.c"
+Finished building: ../src/D5simhost.c
+ 
+Building target: D5simhost.exe
+Invoking: Cygwin C Linker
+gcc  -o "D5simhost.exe"  ./src/D5simhost.o   
+Finished building target: D5simhost.exe
+ 
+12:05:15 **** Incremental Build of configuration Debug for project D5simhost ****
+make all 
+make: Nothing to be done for 'all'.
+12:05:30 **** Incremental Build of configuration Debug for project D5simhost ****
+make all 
+Building file: ../src/D5simhost.c
+Invoking: Cygwin C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/D5simhost.d" -MT"src/D5simhost.o" -o "src/D5simhost.o" "../src/D5simhost.c"
+Finished building: ../src/D5simhost.c
+ 
+Building target: D5simhost.exe
+Invoking: Cygwin C Linker
+gcc  -o "D5simhost.exe"  ./src/D5simhost.o   
+Finished building target: D5simhost.exe
+ 
+12:13:05 **** Incremental Build of configuration Debug for project D5simhost ****
+make all 
+Building file: ../src/D5simhost.c
+Invoking: Cygwin C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/D5simhost.d" -MT"src/D5simhost.o" -o "src/D5simhost.o" "../src/D5simhost.c"
+Finished building: ../src/D5simhost.c
+ 
+Building target: D5simhost.exe
+Invoking: Cygwin C Linker
+gcc  -o "D5simhost.exe"  ./src/D5simhost.o   
+Finished building target: D5simhost.exe
+ 
+12:13:18 **** Incremental Build of configuration Debug for project D5simhost ****
+make all 
+Building file: ../src/D5simhost.c
+Invoking: Cygwin C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/D5simhost.d" -MT"src/D5simhost.o" -o "src/D5simhost.o" "../src/D5simhost.c"
+Finished building: ../src/D5simhost.c
+ 
+Building target: D5simhost.exe
+Invoking: Cygwin C Linker
+gcc  -o "D5simhost.exe"  ./src/D5simhost.o   
+Finished building target: D5simhost.exe
+ 
+12:13:34 **** Incremental Build of configuration Debug for project D5simhost ****
+make all 
+Building file: ../src/D5simhost.c
+Invoking: Cygwin C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/D5simhost.d" -MT"src/D5simhost.o" -o "src/D5simhost.o" "../src/D5simhost.c"
+Finished building: ../src/D5simhost.c
+ 
+Building target: D5simhost.exe
+Invoking: Cygwin C Linker
+gcc  -o "D5simhost.exe"  ./src/D5simhost.o   
+Finished building target: D5simhost.exe
+ 
+12:13:42 **** Incremental Build of configuration Debug for project D5simhost ****
+make all 
+Building file: ../src/D5simhost.c
+Invoking: Cygwin C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/D5simhost.d" -MT"src/D5simhost.o" -o "src/D5simhost.o" "../src/D5simhost.c"
+Finished building: ../src/D5simhost.c
+ 
+Building target: D5simhost.exe
+Invoking: Cygwin C Linker
+gcc  -o "D5simhost.exe"  ./src/D5simhost.o   
+Finished building target: D5simhost.exe
+ 
+12:14:05 **** Incremental Build of configuration Debug for project D5simhost ****
+make all 
+Building file: ../src/D5simhost.c
+Invoking: Cygwin C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/D5simhost.d" -MT"src/D5simhost.o" -o "src/D5simhost.o" "../src/D5simhost.c"
+Finished building: ../src/D5simhost.c
+ 
+Building target: D5simhost.exe
+Invoking: Cygwin C Linker
+gcc  -o "D5simhost.exe"  ./src/D5simhost.o   
+Finished building target: D5simhost.exe
+ 
+12:20:20 **** Incremental Build of configuration Debug for project D5simhost ****
+make all 
+Building file: ../src/D5simhost.c
+Invoking: Cygwin C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/D5simhost.d" -MT"src/D5simhost.o" -o "src/D5simhost.o" "../src/D5simhost.c"
+Finished building: ../src/D5simhost.c
+ 
+Building target: D5simhost.exe
+Invoking: Cygwin C Linker
+gcc  -o "D5simhost.exe"  ./src/D5simhost.o   
+Finished building target: D5simhost.exe
+ 
+12:52:05 **** Incremental Build of configuration Debug for project D5simhost ****
+make all 
+Building file: ../src/D5simhost.c
+Invoking: Cygwin C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/D5simhost.d" -MT"src/D5simhost.o" -o "src/D5simhost.o" "../src/D5simhost.c"
+Finished building: ../src/D5simhost.c
+ 
+Building target: D5simhost.exe
+Invoking: Cygwin C Linker
+gcc  -o "D5simhost.exe"  ./src/D5simhost.o   
+Finished building target: D5simhost.exe
+ 
+13:12:59 **** Incremental Build of configuration Debug for project D5simhost ****
+make all 
+Building file: ../src/D5simhost.c
+Invoking: Cygwin C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/D5simhost.d" -MT"src/D5simhost.o" -o "src/D5simhost.o" "../src/D5simhost.c"
+Finished building: ../src/D5simhost.c
+ 
+Building target: D5simhost.exe
+Invoking: Cygwin C Linker
+gcc  -o "D5simhost.exe"  ./src/D5simhost.o   
+Finished building target: D5simhost.exe
+ 
+13:13:12 **** Incremental Build of configuration Debug for project D5simhost ****
+make all 
+Building file: ../src/D5simhost.c
+Invoking: Cygwin C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/D5simhost.d" -MT"src/D5simhost.o" -o "src/D5simhost.o" "../src/D5simhost.c"
+Finished building: ../src/D5simhost.c
+ 
+Building target: D5simhost.exe
+Invoking: Cygwin C Linker
+gcc  -o "D5simhost.exe"  ./src/D5simhost.o   
+Finished building target: D5simhost.exe
+ 
+13:13:25 **** Incremental Build of configuration Debug for project D5simhost ****
+make all 
+Building file: ../src/D5simhost.c
+Invoking: Cygwin C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/D5simhost.d" -MT"src/D5simhost.o" -o "src/D5simhost.o" "../src/D5simhost.c"
+Finished building: ../src/D5simhost.c
+ 
+Building target: D5simhost.exe
+Invoking: Cygwin C Linker
+gcc  -o "D5simhost.exe"  ./src/D5simhost.o   
+Finished building target: D5simhost.exe
+ 
+13:13:34 **** Incremental Build of configuration Debug for project D5simhost ****
+make all 
+Building file: ../src/D5simhost.c
+Invoking: Cygwin C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/D5simhost.d" -MT"src/D5simhost.o" -o "src/D5simhost.o" "../src/D5simhost.c"
+Finished building: ../src/D5simhost.c
+ 
+Building target: D5simhost.exe
+Invoking: Cygwin C Linker
+gcc  -o "D5simhost.exe"  ./src/D5simhost.o   
+Finished building target: D5simhost.exe
+ 
+13:13:51 **** Incremental Build of configuration Debug for project D5simhost ****
+make all 
+Building file: ../src/D5simhost.c
+Invoking: Cygwin C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/D5simhost.d" -MT"src/D5simhost.o" -o "src/D5simhost.o" "../src/D5simhost.c"
+Finished building: ../src/D5simhost.c
+ 
+Building target: D5simhost.exe
+Invoking: Cygwin C Linker
+gcc  -o "D5simhost.exe"  ./src/D5simhost.o   
+Finished building target: D5simhost.exe
+ 
+13:13:58 **** Incremental Build of configuration Debug for project D5simhost ****
+make all 
+Building file: ../src/D5simhost.c
+Invoking: Cygwin C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/D5simhost.d" -MT"src/D5simhost.o" -o "src/D5simhost.o" "../src/D5simhost.c"
+Finished building: ../src/D5simhost.c
+ 
+Building target: D5simhost.exe
+Invoking: Cygwin C Linker
+gcc  -o "D5simhost.exe"  ./src/D5simhost.o   
+Finished building target: D5simhost.exe
+ 

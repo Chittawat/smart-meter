@@ -1,0 +1,308 @@
+/*
+ * Embedded.c
+ *
+ *  Created on: 31 Jan 2018
+ *      Author: cp5g15
+ */
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <inttypes.h>
+#include <avr/io.h>
+#include <util/delay.h>
+#include <avr/interrupt.h>
+#include "lcd.h"
+
+#define FREQ 488
+#define TONE_PRESCALER 8UL
+
+unsigned long toneClock;
+
+//Function
+
+void display_description(int x_axis, int y_axis, char description[]){
+	display.x=x_axis;
+	display.y=y_axis;
+	display_string(description);
+}
+
+void display_value(int x_axis, int y_axis, char value[], char unit[]){
+	display.x=x_axis;
+	display.y=y_axis;
+	display_string(value);
+	display_string(unit);
+}
+
+void init_tone(void)
+{
+    DDRD |=_BV(PD5);
+    TCCR1A =_BV(COM1A0)
+    		| _BV(WGM10);
+    TCCR1B=_BV(WGM13)
+    		| _BV(CS11);
+}
+
+void tone(uint16_t frequency)
+{
+	OCR1A= (uint16_t)(F_CPU/(2*2*TONE_PRESCALER)/frequency);
+
+}
+
+//Main Function
+int main ()
+{
+	init_tone();
+	init_lcd();
+	srand(0);
+	int data = 10000;
+	int bit=10;
+
+	//Timer Counter
+
+
+	//input port configuration B
+
+	DDRB=0x00;
+
+	//output port configuration D
+
+	DDRD=0xFF;
+
+	//INPUT_______________________________________________________
+	//voltage
+	double *voltage;
+	double *voltagedec;
+	uint32_t busvoltage,busvoltagedec;
+	voltage=(double*)malloc(bit*sizeof(double));
+	voltagedec=(double*)malloc(bit*sizeof(double));
+
+	//current
+	int *current;
+	uint32_t buscurrent;
+	current=(int*)malloc(bit*sizeof(int));
+
+	//wind
+	int *wind_value;
+	uint32_t wind_value_new,wind_value_old=0;
+	wind_value=(int*)malloc(bit*sizeof(int));
+
+	//solar
+	int *solar_value;
+	uint32_t solar_value_new,solar_value_old=0;
+	solar_value=(int*)malloc(bit*sizeof(int));
+
+	//main
+	int *main_value;
+	uint32_t main_value_new,main_value_old=0;
+	main_value=(int*)malloc(bit*sizeof(int));
+
+	//Battery
+	int *battery_value;
+	battery_value=(int*)malloc(bit*sizeof(int));
+
+	//Load1
+	int *load1_command;
+	load1_command=(int*)malloc(bit*sizeof(int));
+	//Load2
+	int *load2_command;
+	load2_command=(int*)malloc(bit*sizeof(int));
+	//Load3
+	int *load3_command;
+	load3_command=(int*)malloc(bit*sizeof(int));
+
+	//OUTPUT DISPLAY_______________________________________________
+
+	//Title
+
+	char title[]="TEAM G SMART METER";
+	char line[]="________________________________________";
+
+	//Description
+
+	char VBusbar[]="Busbar Voltage:";
+	char IBusbar[]="Busbar Current:";
+	char Wind[]="Wind:";
+	char Solar[]="Solar:";
+	char Main[]="Mains:";
+	char Battery[]="Battery:";
+	char Load1[]="Load1:";
+	char Load2[]="Load2:";
+	char Load3[]="Load3:";
+	char Total_wind[]="Total Wind:";
+	char Total_solar[]="Total solar";
+	char Main_Used[]="Mains used:";
+	char Save[]="Energy Save:";
+
+	//Value representation String
+
+	char high[]="On";
+	char low[] ="Off";
+
+	//Unit String
+
+	char Vrms[] = " Vrms        ";
+	char Irms[] =" Arms         ";
+	char Ampere[] =" A   ";
+	char A_per_S[] =" As   ";
+	char blank[]="    ";
+
+	// Title Team G Smart Meter
+
+	display_description(70,10,title);
+	display_description(2,20,line);
+
+	//Description display
+
+	display_description(10,35,VBusbar); //VBus Bar
+	display_description(10,45,IBusbar); //IBusBar
+	display_description(10,55,Wind); //Wind
+	display_description(10,65,Solar); // Solar
+	display_description(10,75,Main); //Main
+	display_description(10,85,Battery); //Battery On/Off
+	display_description(10,95,Battery); //Battery Value
+	display_description(10,105,Load1); //Load1
+	display_description(10,115,Load2);//Load2
+	display_description(10,125,Load3); //Load3
+	display_description(10,135,Total_wind);//Total wind
+	display_description(10,145,Total_solar);//Total solar
+	display_description(10,155,Main_Used); //Mains Used
+	display_description(10,165,Save);//Energy Saved
+
+	//Value+Unit display
+
+	char voltagestring[bit];
+	char voltagestringdec[bit];
+	char currentstring[bit];
+	char windstring[bit];
+	char totalwindstring[bit];
+	char solarstring[bit];
+	char totalsolarstring[bit];
+	char mainstring[bit];
+	char totalmainstring[bit];
+	char battery_value_string[bit];
+	int n;
+	for(n=0;n<data;n++){
+
+		//convert to string
+
+		//voltage bus
+		*voltage=rand()/(float)(RAND_MAX/10.00);
+		*voltagedec=((*voltage)*1000.00)%1000.00;
+		//*voltage=PINB& _BV(1);
+		busvoltage=*voltage;
+		busvoltagedec=*voltagedec;
+		itoa(busvoltage,voltagestring,10);
+		itoa(busvoltagedec,voltagestringdec,10);
+
+		display.x=140;
+		display.y=35;
+		display_string(voltagestring);
+		display_string(voltagestringdec);
+		display_string(Vrms);
+		//display_value(140,35,voltagestring,Vrms); //VBus Bar
+
+		//current bus
+		*current=rand()%100;
+		//*current=PINB& _BV(2);
+		buscurrent=*current;
+		itoa(buscurrent,currentstring,10);
+		display_value(140,45,currentstring,Irms); //IBusBar
+
+		//wind and total wind
+		*wind_value=rand()%100;
+		//*wind_value=PINB& _BV(3);
+		int actual_wind=*wind_value;
+		wind_value_new=(*wind_value)+wind_value_old;
+		wind_value_old = wind_value_new;
+		itoa(actual_wind,windstring,10);
+		itoa(wind_value_new,totalwindstring,10);
+		display_value(140,55,windstring,Ampere); //Wind
+		display_value(140,135,totalwindstring,A_per_S);//Total wind
+
+		//solar and total solar
+		*solar_value=rand()%100;
+		//*solar_value=PINB& _BV(4);
+		int actual_solar=*solar_value;
+		solar_value_new=(*solar_value)+solar_value_old;
+		solar_value_old = solar_value_new;
+		itoa(actual_solar,solarstring,10);
+		itoa(solar_value_new,totalsolarstring,10);
+		display_value(140,65,solarstring,Ampere); // Solar
+		display_value(140,145,totalsolarstring,A_per_S);//Total solar
+
+		//main and main used
+		*main_value=rand()%100;
+		//*main_value=PINB& _BV(5);
+		int actual_main=*main_value;
+		main_value_new=(*main_value)+main_value_old;
+		main_value_old = main_value_new;
+		itoa(actual_main,mainstring,10);
+		itoa(main_value_new,totalmainstring,10);
+		display_value(140,75,mainstring,Ampere); //Main
+		display_value(140,155,totalmainstring,A_per_S); //Mains Used
+
+		//battery
+		*battery_value=rand()%5;
+		//*battery_value=PINB& _BV(6);
+		int actual_battery=*battery_value;
+		itoa(actual_battery,battery_value_string,10);
+		display_value(140,95,battery_value_string,A_per_S); //Battery Value
+		if(actual_battery==0){
+			display_value(140,85,low,blank); //Battery On/Off
+		}
+		else{
+			display_value(140,85,high,blank); //Battery On/Off
+		}
+		
+		//load1
+		*load1_command=rand()%2;
+		int actual_load1=*load1_command;
+		if(actual_load1==0){
+			display_value(140,105,low,blank); //Battery On/Off
+		}
+		else{
+			display_value(140,105,high,blank); //Battery On/Off
+		}
+		
+		//load2
+		*load2_command=rand()%2;
+		int actual_load2=*load2_command;
+		if(actual_load2==0){
+			display_value(140,115,low,blank); //Battery On/Off
+		}
+		else{
+			display_value(140,115,high,blank); //Battery On/Off
+		}
+		
+		//load3
+		*load3_command=rand()%2;
+		int actual_load3=*load3_command;
+		if(actual_load3==0){
+			display_value(140,125,low,blank); //Battery On/Off
+		}
+		else{
+			display_value(140,125,high,blank); //Battery On/Off
+		}
+
+		display_value(140,165,voltagestring,A_per_S);//Energy Saved
+
+			_delay_ms(250);
+			_delay_ms(200);
+	}
+
+	//Free Memory
+	free(voltage);
+	free(voltagedec);
+	free(current);
+	free(battery_value);
+	free(wind_value);
+	free(solar_value);
+	free(main_value);
+	free(load1_command);
+	free(load2_command);
+	free(load3_command);
+
+	while(1);
+	return 0;
+}

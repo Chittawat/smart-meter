@@ -1,0 +1,9 @@
+avr-gcc -mmcu=atmega644p -DF_CPU=12000000 -Wall -Os -c Embedded.c -o Embedded.o
+
+avr-gcc -mmcu=atmega644p -L../ -Wall -Os -o Embedded.elf Embedded.o -llcd
+
+avr-objcopy -O ihex Embedded.elf Embedded.hex
+
+avrdude -c usbasp -p m644p -U flash:w:Embedded.hex
+
+avr-objdump -h -S liblcdx.a  >"liblcdx.lss"

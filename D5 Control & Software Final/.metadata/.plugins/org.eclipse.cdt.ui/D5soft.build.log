@@ -1,0 +1,43 @@
+20:16:53 **** Incremental Build of configuration Debug for project D5soft ****
+make all 
+Building file: ../liblcd/lcdlib/._font.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega16 -DF_CPU=1000000UL -MMD -MP -MF"liblcd/lcdlib/._font.d" -MT"liblcd/lcdlib/._font.o" -c -o "liblcd/lcdlib/._font.o" "../liblcd/lcdlib/._font.c"
+../liblcd/lcdlib/._font.c:1:1: warning: null character(s) ignored
+../liblcd/lcdlib/._font.c:1: error: stray '\5' in program
+../liblcd/lcdlib/._font.c:1: error: stray '\26' in program
+../liblcd/lcdlib/._font.c:1: error: stray '\7' in program
+../liblcd/lcdlib/._font.c:1:5: warning: null character(s) ignored
+../liblcd/lcdlib/._font.c:1: error: stray '\2' in program
+../liblcd/lcdlib/._font.c:1:7: warning: null character(s) ignored
+../liblcd/lcdlib/._font.c:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'OS'
+../liblcd/lcdlib/._font.c:1:17: warning: null character(s) ignored
+../liblcd/lcdlib/._font.c:1: error: stray '\2' in program
+../liblcd/lcdlib/._font.c:1:27: warning: null character(s) ignored
+../liblcd/lcdlib/._font.c:1:35: warning: null character(s) ignored
+../liblcd/lcdlib/._font.c:1:39: warning: null character(s) ignored
+../liblcd/lcdlib/._font.c:1: error: stray '\2' in program
+../liblcd/lcdlib/._font.c:1:43: warning: null character(s) ignored
+../liblcd/lcdlib/._font.c:1: error: stray '\253' in program
+../liblcd/lcdlib/._font.c:1:47: warning: null character(s) ignored
+../liblcd/lcdlib/._font.c:1:55: warning: null character(s) ignored
+../liblcd/lcdlib/._font.c:1:89: warning: null character(s) ignored
+../liblcd/lcdlib/._font.c:1: error: stray '\253' in program
+../liblcd/lcdlib/._font.c:1:97: warning: null character(s) ignored
+../liblcd/lcdlib/._font.c:1: error: stray '\234' in program
+../liblcd/lcdlib/._font.c:1:101: warning: null character(s) ignored
+../liblcd/lcdlib/._font.c:1: error: stray '\17' in program
+../liblcd/lcdlib/._font.c:1:105: warning: null character(s) ignored
+../liblcd/lcdlib/._font.c:1: error: stray '\1' in program
+../liblcd/lcdlib/._font.c:1:121: warning: null character(s) ignored
+../liblcd/lcdlib/._font.c:1: error: stray '\234' in program
+../liblcd/lcdlib/._font.c:1:125: warning: null character(s) ignored
+../liblcd/lcdlib/._font.c:1: error: stray '\17' in program
+../liblcd/lcdlib/._font.c:1:129: warning: null character(s) ignored
+../liblcd/lcdlib/._font.c:1: error: stray '\27' in program
+../liblcd/lcdlib/._font.c:1:154: warning: null character(s) ignored
+../liblcd/lcdlib/._font.c:1: error: expected identifier or '(' before numeric constant
+make: *** [liblcd/lcdlib/._font.o] Error 1
+
+20:16:54 Build Finished (took 820ms)
+

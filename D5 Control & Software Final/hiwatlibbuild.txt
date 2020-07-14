@@ -1,0 +1,7 @@
+avr-gcc -mmcu=atmega644p -DF_CPU=12000000 -Wall -Os -c font.c -o font.o
+
+avr-gcc -mmcu=atmega644p -DF_CPU=12000000 -Wall -Os -c ili934x.c -o ili934x.o
+
+avr-gcc -mmcu=atmega644p -DF_CPU=12000000 -Wall -Os -c lcd.c -o lcd.o
+
+avr-ar -r "liblcdx.a" ./font.o ./lcd.o ./ili934x.o

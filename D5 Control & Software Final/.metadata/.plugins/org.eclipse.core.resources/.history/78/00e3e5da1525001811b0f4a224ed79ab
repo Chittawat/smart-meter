@@ -1,0 +1,35 @@
+/*
+ ============================================================================
+ Name        : D5simhost.c
+ Author      : 
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Hello World in C, Ansi-style
+ ============================================================================
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include<math.h>
+
+
+int main()
+{
+	float solar_value, wind_value,main_value,battery_value,busvoltage;
+	float actual_load1,actual_load2,actual_load3;
+
+	float totalinput= *wind_value+*solar_value;
+	float totalload = actual_load1+actual_load2+actual_load3;
+	float batterylimit=100;
+
+	if(busvoltage==0){
+		main_value=0;
+	}
+	else
+	{
+		main_value=0;
+	}
+
+	printf("%f",main_value);
+}

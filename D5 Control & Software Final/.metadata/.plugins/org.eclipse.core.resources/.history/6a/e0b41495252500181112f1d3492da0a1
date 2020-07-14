@@ -1,0 +1,134 @@
+/*
+ ============================================================================
+ Name        : D5simhost.c
+ Author      : 
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Hello World in C, Ansi-style
+ ============================================================================
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include<math.h>
+
+
+int main()
+{
+	float solar_value, wind_value,main_value,battery_value=0,busvoltage;
+	float actual_load1,actual_load2,actual_load3;
+	float diff,diff2,diff3;
+
+	battery_value=0;
+	wind_value=3;
+	solar_value=3;
+
+	actual_load1=2;
+	actual_load2=2;
+	actual_load3=6;
+
+	busvoltage=1;
+
+
+	float totalinput= wind_value+solar_value;
+	float totalload = actual_load1+actual_load2+actual_load3;
+	float batterylimit=100;
+	float mainlimit=3;
+
+	if(busvoltage<=0.07){
+		main_value=0;
+	}
+	else
+	{
+
+/////////////////////////////
+		//moreinput
+		/////////////////////////
+
+		if(totalinput>totalload)
+		{
+			diff=totalinput-totalload;
+			if(battery_value>=batterylimit){
+				//batteryoff
+				main_value=0;
+			}
+			else{
+				if(diff>=1){
+					//charge()
+					battery_value+=1;
+					main_value=0;
+				}
+				else{
+					//charge()
+					battery_value+=1;
+					main_value=1-diff;
+				}
+			}
+		}
+
+///////////////////
+		//equal
+		/////////////////////
+
+		else if(totalinput==totalload){
+				main_value=0;
+		}
+
+/////////////////////////
+		//moreload
+		///////////////////
+
+		else{// totalload>totalinput
+			diff=totalload-totalinput;
+			//limit main
+			if(diff<=mainlimit){
+				if(mainlimit-diff>=1){
+					if(battery_value>=batterylimit){
+						//batteryoff
+						main_value=diff;
+					}
+					else{
+						main_value=diff+1;
+						//charge()
+						battery_value+=1;
+					}
+				}
+				else{
+					main_value=diff;
+					//batteryoff
+				}
+			}
+			else{
+				main_value=mainlimit;
+				if(battery_value>0){
+					//discharge
+					battery_value-=1;
+					diff2=diff-1;
+					main_value=diff2;
+				}
+				else{
+					//cutoffload3
+					diff3=diff-1.4;
+					main_value=diff3;
+					if(mainlimit>diff3){
+						if(mainlimit-diff3>=1){
+							//charge
+							main_value=diff3+1;
+							battery_value+=1;
+						}
+						else{
+							main_value=diff3;
+						}
+					}
+					else{
+
+					}
+				}
+			}
+
+		}
+	}
+
+	printf("%.3f",main_value);
+}

@@ -1,0 +1,38 @@
+/*
+ ============================================================================
+ Name        : D5simhost.c
+ Author      : 
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Hello World in C, Ansi-style
+ ============================================================================
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include<math.h>
+
+
+int main()
+{
+  long array[100], *maximum, size, c, location = 1;
+
+  printf("Enter the number of elements in array\n");
+
+  for ( c = 0 ; c <5 ; c++ )
+    scanf("%ld", &array[c]);
+
+  *maximum = *array;
+
+  for (c = 1; c < 5; c++)
+  {
+    if (*(array+c) > *maximum)
+    {
+       *maximum = *(array+c);
+    }
+  }
+
+  printf("Maximum element found at location %ld and it's value is %ld.\n", location, *maximum);
+  return 0;
+}

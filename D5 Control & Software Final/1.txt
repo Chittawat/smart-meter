@@ -1,0 +1,10 @@
+lcd.o    init_lcd
+lcd.o    set_orientation
+lcd.o    display
+lcd.o    fill_rectangle
+lcd.o    fill_rectangle_indexed
+lcd.o    clear_screen
+lcd.o    display_char
+lcd.o    display_string
+ili934x.o    init_display_controller
+font.o    font5x7

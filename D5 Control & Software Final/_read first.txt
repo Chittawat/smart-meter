@@ -1,0 +1,11 @@
+These are the command use to flash the program into the "Il Matto" microcontroller.
+Please copy these command and run in the avr toolchai  command line.
+
+avr-gcc -mmcu=atmega644p -DF_CPU=12000000 -Wall -Os -c Embedded.c -o Embedded.o
+
+avr-gcc -mmcu=atmega644p -L../ -Wall -Os -o Embedded.elf Embedded.o -llcdx
+
+avr-objcopy -O ihex Embedded.elf Embedded.hex
+
+avrdude -c usbasp -p m644p -U flash:w:Embedded.hex
+

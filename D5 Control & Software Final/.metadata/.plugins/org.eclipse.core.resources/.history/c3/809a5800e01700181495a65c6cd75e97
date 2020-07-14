@@ -1,0 +1,466 @@
+/*
+ * Embedded.c
+ *
+ *  Created on: 31 Jan 2018
+ *      Author: cp5g15
+ */
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <avr/power.h>
+#include <inttypes.h>
+#include <math.h>
+#include <avr/io.h>
+#include <util/delay.h>
+#include <avr/interrupt.h>
+#include "lcd.h"
+
+#define FREQ 488
+#define TONE_PRESCALER 8
+
+unsigned long toneClock;
+
+//Function
+
+void init_adc(void){/* F_ADC = F_CPU/64 */
+	ADMUX = 0;
+	ADCSRA |= _BV(ADEN); /* Enable ADC */
+	ADCSRA |= _BV(ADPS2) | _BV(ADPS1);
+}
+
+
+void channel_adc(uint8_t n)
+{
+	ADMUX=n;
+}
+
+uint16_t read_adc(void)
+{
+	ADCSRA |= _BV(ADSC); /* Start Conversions */
+
+
+	while (ADCSRA&_BV(ADSC));
+
+	return ADC;
+}
+
+void display_description(int x_axis, int y_axis, char description[]){
+	display.x=x_axis;
+	display.y=y_axis;
+	display_string(description);
+}
+
+void display_value(int x_axis, int y_axis, char value[], char unit[]){
+	display.x=x_axis;
+	display.y=y_axis;
+	display_string(value);
+	display_string(unit);
+}
+
+
+void init_tone(void)
+{
+    DDRD |=_BV(PD5);
+    TCCR1A =_BV(COM1A0)
+    		| _BV(WGM10);
+    TCCR1B=_BV(WGM13)
+    		| _BV(CS11);
+}
+
+void tone(uint16_t frequency)
+{
+	OCR1A= (uint16_t)(F_CPU/(2*2*TONE_PRESCALER)/frequency);
+
+}
+
+//Main Function
+int main ()
+{
+	//Initialise adc
+	init_adc();
+
+	//LCD Initialise
+
+	init_tone();
+	init_lcd();
+	srand(0);
+	int data = 8000;
+	int bit=10;
+
+	//Timer Counter
+
+
+	//input port configuration B
+
+	DDRB=0xFF;
+	PORTB = 0xFF;
+
+	//output port configuration D
+
+	DDRD=0xFF;
+	PORTD = 0xFF;
+
+
+	//INPUT_______________________________________________________
+	//voltage
+	int *voltage;
+	uint16_t resultvoltage;
+	uint32_t busvoltage,busvoltagedec;
+	voltage=(int*)malloc(bit*sizeof(int));
+
+	//current
+	int *current;
+	uint16_t resultcurrent;
+	uint32_t buscurrent,buscurrentdec;
+	current=(int*)malloc(bit*sizeof(int));
+
+	//wind
+	float *wind_value;
+	float wind_value_new,wind_value_old=0;
+	wind_value=(float*)malloc(bit*sizeof(float));
+
+	//solar
+	float *solar_value;
+	float solar_value_new,solar_value_old=0;
+	solar_value=(float*)malloc(bit*sizeof(float));
+
+	//main
+	float *main_value;
+	float main_value_new,main_value_old=0;
+	main_value=(float*)malloc(bit*sizeof(float));
+
+	//Battery
+	int *battery_value;
+	battery_value=(int*)malloc(bit*sizeof(int));
+
+	//Load1
+	int *load1_command;
+	load1_command=(int*)malloc(bit*sizeof(int));
+	//Load2
+	int *load2_command;
+	load2_command=(int*)malloc(bit*sizeof(int));
+	//Load3
+	int *load3_command;
+	load3_command=(int*)malloc(bit*sizeof(int));
+
+	//OUTPUT DISPLAY_______________________________________________
+
+	//Title
+
+	char title[]="TEAM G SMART METER";
+	char line[]="________________________________________";
+
+	//Description
+
+	char VBusbar[]="Busbar Voltage:";
+	char IBusbar[]="Busbar Current:";
+	char Wind[]="Wind:";
+	char Solar[]="Solar:";
+	char Main[]="Mains:";
+	char Battery[]="Battery:";
+	char Load1[]="Load1:";
+	char Load2[]="Load2:";
+	char Load3[]="Load3:";
+	char Total_wind[]="Total Wind:";
+	char Total_solar[]="Total solar";
+	char Main_Used[]="Mains used:";
+	char Save[]="Energy Save:";
+
+	//Value representation String
+
+	char high[]="On";
+	char low[] ="Off";
+
+	//Unit String
+
+	char Vrms[] = " Vrms        ";
+	char Irms[] =" Arms       ";
+	char Ampere[] =" A   ";
+	char A_per_S[] =" As   ";
+	char blank[]="    ";
+
+	// Title Team G Smart Meter
+
+	display_description(70,10,title);
+	display_description(2,20,line);
+
+	//Description display
+
+	display_description(10,35,VBusbar); //VBus Bar
+	display_description(10,45,IBusbar); //IBusBar
+	display_description(10,55,Wind); //Wind
+	display_description(10,65,Solar); // Solar
+	display_description(10,75,Main); //Main
+	display_description(10,85,Battery); //Battery On/Off
+	display_description(10,95,Battery); //Battery Value
+	display_description(10,105,Load1); //Load1
+	display_description(10,115,Load2);//Load2
+	display_description(10,125,Load3); //Load3
+	display_description(10,135,Total_wind);//Total wind
+	display_description(10,145,Total_solar);//Total solar
+	display_description(10,155,Main_Used); //Mains Used
+	display_description(10,165,Save);//Energy Saved
+
+	//Value+Unit display
+
+	char voltagestring[bit];
+	char voltagestringdecimal[bit];
+	char currentstring[bit];
+	char currentstringdecimal[bit];
+	char windstring[bit];
+	char windstringdecimal[bit];
+	char totalwindstring[bit];
+	char totalwindstringdecimal[bit];
+	char solarstring[bit];
+	char solarstringdecimal[bit];
+	char totalsolarstring[bit];
+	char totalsolarstringdecimal[bit];
+	char mainstring[bit];
+	char mainstringdecimal[bit];
+	char totalmainstring[bit];
+	char totalmainstringdecimal[bit];
+	char battery_value_string[bit];
+	char onedecimalpoint[]=".";
+	char twodecimalpoint[]=".0";
+	char threedecimalpoint[]=".00";
+	int n;
+	for(n=0;n<data;n++){
+
+		//convert to string
+
+		//voltage bus
+		//*voltage=(rand()/(float)(RAND_MAX/4.00))*1000;
+		channel_adc(0);
+		resultvoltage=read_adc();
+		*voltage=((resultvoltage*3.3/1024))*1000;
+		busvoltage=*voltage/1000;
+		busvoltagedec=*voltage%1000;
+		itoa(busvoltage,voltagestring,10);
+		itoa(busvoltagedec,voltagestringdecimal,10);
+		if(busvoltagedec<10)
+		{
+			strcat(voltagestring,threedecimalpoint);
+			strcat(voltagestring,voltagestringdecimal);
+		}
+		else if(busvoltagedec<100 &&busvoltagedec>=10)
+		{
+			strcat(voltagestring,twodecimalpoint);
+			strcat(voltagestring,voltagestringdecimal);
+		}
+		else
+		{
+			strcat(voltagestring,onedecimalpoint);
+			strcat(voltagestring,voltagestringdecimal);
+		}
+
+		display_value(140,35,voltagestring,Vrms); //VBus Bar
+
+		//current bus
+		//*current=(rand()/(float)(RAND_MAX/10.00))*1000;
+		resultcurrent=read_adc();
+		*current=resultcurrent*1000;
+		buscurrent=*current/1000;
+		buscurrentdec=*current%1000;
+		itoa(buscurrent,currentstring,10);
+		itoa(buscurrentdec,currentstringdecimal,10);
+		if(buscurrentdec<10)
+		{
+			strcat(currentstring,threedecimalpoint);
+			strcat(currentstring,currentstringdecimal);
+		}
+		else if(buscurrentdec<100 &&buscurrentdec>=10)
+		{
+			strcat(currentstring,twodecimalpoint);
+			strcat(currentstring,currentstringdecimal);
+		}
+		else
+		{
+			strcat(currentstring,onedecimalpoint);
+			strcat(currentstring,currentstringdecimal);
+		}
+		display_value(140,45,currentstring,Irms); //IBusBar
+
+		//wind
+
+		*wind_value=(rand()/(float)(RAND_MAX/5.00));
+		//*wind_value=PINB& _BV(3);
+		int windpow3=(*wind_value)*1000;
+		int actual_wind=windpow3/1000;
+		int winddec = windpow3%1000;
+		itoa(actual_wind,windstring,10);
+		itoa(winddec,windstringdecimal,10);
+		if(winddec<10)
+		{
+			strcat(windstring,threedecimalpoint);
+			strcat(windstring,windstringdecimal);
+		}
+		else if(winddec<100 &&winddec>=10)
+		{
+			strcat(windstring,twodecimalpoint);
+			strcat(windstring,windstringdecimal);
+		}
+		else
+		{
+			strcat(windstring,onedecimalpoint);
+			strcat(windstring,windstringdecimal);
+		}
+		display_value(140,55,windstring,Ampere); //Wind
+
+		//total wind
+
+		wind_value_new=(*wind_value)+wind_value_old;
+		wind_value_old = wind_value_new;
+		uint32_t totalwindk=wind_value_new*10;
+		uint32_t totalwind= totalwindk/10;
+		uint32_t totalwinddec= totalwindk%10; //ISsue in insert decimal point
+		itoa(totalwind,totalwindstring,10);
+		itoa(totalwinddec,totalwindstringdecimal,10);
+		strcat(totalwindstring,onedecimalpoint);
+		strcat(totalwindstring,totalwindstringdecimal);
+
+		display_value(140,135,totalwindstring,A_per_S);//Total wind
+
+		//solar
+
+		*solar_value=(rand()/(float)(RAND_MAX/5.00));
+		//*solar_value=PINB& _BV(4);
+		int solarpow3=(*solar_value)*1000;
+		uint32_t actual_solar=solarpow3/1000;
+		uint32_t solardec = solarpow3%1000;
+		itoa(actual_solar,solarstring,10);
+		itoa(solardec,solarstringdecimal,10);
+		if(solardec<10)
+		{
+			strcat(solarstring,threedecimalpoint);
+			strcat(solarstring,solarstringdecimal);
+		}
+		else if(solardec<100 &&solardec>=10)
+		{
+			strcat(solarstring,twodecimalpoint);
+			strcat(solarstring,solarstringdecimal);
+		}
+		else
+		{
+			strcat(solarstring,onedecimalpoint);
+			strcat(solarstring,solarstringdecimal);
+		}
+		display_value(140,65,solarstring,Ampere); // Solar
+
+		//total solar
+
+		solar_value_new=(*solar_value)+solar_value_old;
+		solar_value_old = solar_value_new;
+		uint32_t totalsolark=solar_value_new*10;
+		uint32_t totalsolar= (totalsolark)/10;
+		uint32_t totalsolardec=0; //ISsue in insert decimal point
+		itoa(totalsolar,totalsolarstring,10);
+		itoa(totalsolardec,totalsolarstringdecimal,10);
+		strcat(totalsolarstring,onedecimalpoint);
+		strcat(totalsolarstring,totalsolarstringdecimal);
+
+		display_value(140,145,totalsolarstring,A_per_S);//Total solar
+
+		//main
+
+		*main_value=(rand()/(float)(RAND_MAX/10.00));
+		//*main_value=PINB& _BV(5);
+		int mainpow3=(*main_value)*1000;
+		uint32_t actual_main=mainpow3/1000;
+		uint32_t maindec = mainpow3%1000;
+		itoa(actual_main,mainstring,10);
+		itoa(maindec,mainstringdecimal,10);
+		if(maindec<10)
+		{
+			strcat(mainstring,threedecimalpoint);
+			strcat(mainstring,mainstringdecimal);
+		}
+		else if(maindec<100 &&maindec>=10)
+		{
+			strcat(mainstring,twodecimalpoint);
+			strcat(mainstring,mainstringdecimal);
+		}
+		else
+		{
+			strcat(mainstring,onedecimalpoint);
+			strcat(mainstring,mainstringdecimal);
+		}
+		display_value(140,155,totalmainstring,A_per_S); //Mains Used
+
+		//main used
+		main_value_new=(*main_value)+main_value_old;
+				main_value_old = main_value_new;
+				uint32_t totalmaink=main_value_new*10;
+				uint32_t totalmain= (totalmaink)/10;
+				uint32_t totalmaindec=0; //ISsue in insert decimal point
+				itoa(totalmain,totalmainstring,10);
+				itoa(totalmaindec,totalmainstringdecimal,10);
+				strcat(totalmainstring,onedecimalpoint);
+				strcat(totalmainstring,totalmainstringdecimal);
+		display_value(140,75,mainstring,Ampere); //Main
+
+
+		//battery
+		*battery_value=(rand()/(float)(RAND_MAX/5.00));
+		//*battery_value=PINB& _BV(6);
+		int actual_battery=*battery_value;
+		itoa(actual_battery,battery_value_string,10);
+		display_value(140,95,battery_value_string,A_per_S); //Battery Value
+		if(actual_battery==0){
+			display_value(140,85,low,blank); //Battery On/Off
+		}
+		else{
+			display_value(140,85,high,blank); //Battery On/Off
+		}
+		
+		//load1
+		*load1_command=rand()%2;
+		int actual_load1=*load1_command;
+		if(actual_load1==0){
+			display_value(140,105,low,blank); //Battery On/Off
+		}
+		else{
+			display_value(140,105,high,blank); //Battery On/Off
+		}
+		
+		//load2
+		*load2_command=rand()%2;
+		int actual_load2=*load2_command;
+		if(actual_load2==0){
+			display_value(140,115,low,blank); //Battery On/Off
+		}
+		else{
+			display_value(140,115,high,blank); //Battery On/Off
+		}
+		
+		//load3
+		*load3_command=rand()%2;
+		int actual_load3=*load3_command;
+		if(actual_load3==0){
+			display_value(140,125,low,blank); //Battery On/Off
+		}
+		else{
+			display_value(140,125,high,blank); //Battery On/Off
+		}
+
+		display_value(140,165,voltagestring,A_per_S);//Energy Saved
+
+			_delay_ms(250);
+			_delay_ms(250);
+	}
+
+	//Free Memory
+	free(voltage);
+	free(current);
+	free(battery_value);
+	free(wind_value);
+	free(solar_value);
+	free(main_value);
+	free(load1_command);
+	free(load2_command);
+	free(load3_command);
+
+	while(1);
+	return 0;
+}
